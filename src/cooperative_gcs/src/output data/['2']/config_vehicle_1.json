@@ -1,0 +1,920 @@
+[
+    {
+        "vehicle para": {
+            "name": "Chevy Bolt",
+            "VEHICLE_ID": 1,
+            "L_F": 1.5213,
+            "L_R": 1.4987,
+            "V_MIN": 0.0,
+            "V_MAX": 10.0,
+            "A_MIN": -2.0,
+            "A_MAX": 0.7,
+            "DF_MIN": -0.3,
+            "DF_MAX": 0.3,
+            "A_DOT_MIN": -1.5,
+            "A_DOT_MAX": 1.5,
+            "DF_DOT_MIN": -0.3,
+            "DF_DOT_MAX": 0.3
+        },
+        "trajectory para": {
+            "path": "12_09_buckeyelot_striaght.csv",
+            "original_lat": 40.01481644796,
+            "original_lon": -83.03112299195,
+            "original_alt": 229,
+            "sample": 0.05,
+            "V_REF": [
+                2
+            ]
+        },
+        "controller para": [
+            "MPC-CBF-QP"
+        ],
+        "dynamics para": [
+            "RK2"
+        ],
+        "mpc para": {
+            "Qposx": 500,
+            "Qposy": 500,
+            "Qpsi": 100,
+            "Qvel": 500,
+            "R": {
+                "type": "diag",
+                "values": [
+                    100,
+                    50
+                ]
+            },
+            "N": 7,
+            "DT": 0.1,
+            "LHD": 10,
+            "cbf": {
+                "SAFETY_DIS": 2,
+                "VEHICLE_R": 1.8,
+                "GAMMA": 0.3,
+                "KB": 2,
+                "ALPHA": 7,
+                "LAMBDA": 1,
+                "H": {
+                    "type": "eye",
+                    "values": [
+                        1,
+                        1
+                    ]
+                },
+                "G": {
+                    "values": null
+                }
+            },
+            "obstacle_source": "others"
+        },
+        "cbf para": {
+            "SAFETY_DIS": 2,
+            "VEHICLE_R": 1.8,
+            "GAMMA": 0.3,
+            "KB": 2,
+            "ALPHA": 7,
+            "LAMBDA": 1,
+            "H": {
+                "type": "eye",
+                "values": [
+                    1,
+                    1
+                ]
+            },
+            "G": {
+                "values": null
+            }
+        },
+        "scenario para": [
+            {
+                "name": "2",
+                "type": "sudden_ped",
+                "numofobs": 4,
+                "params": [
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.1,
+                        "START_POS": [
+                            -83,
+                            89
+                        ],
+                        "SUDDEN_DIS": 17,
+                        "END_POS_1": [
+                            -64,
+                            92
+                        ],
+                        "END_POS_2": [
+                            -52,
+                            81
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.5,
+                        "START_POS": [
+                            -55,
+                            59
+                        ],
+                        "SUDDEN_DIS": 11,
+                        "END_POS_1": [
+                            -58,
+                            76
+                        ],
+                        "END_POS_2": [
+                            -46,
+                            50
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 4.3,
+                        "START_POS": [
+                            -61,
+                            97
+                        ],
+                        "SUDDEN_DIS": 16,
+                        "END_POS_1": [
+                            -77,
+                            84
+                        ],
+                        "END_POS_2": [
+                            -50,
+                            40
+                        ]
+                    }
+                ],
+                "SAFETY_DIS": 2,
+                "mpc_max_cpu_time": null,
+                "qp_max_cpu_time": null,
+                "mpc_max_iteration": null,
+                "qp_max_iteration": null,
+                "NUMOFOBS": 4
+            }
+        ]
+    },
+    {
+        "vehicle para": {
+            "name": "Chevy Bolt",
+            "VEHICLE_ID": 1,
+            "L_F": 1.5213,
+            "L_R": 1.4987,
+            "V_MIN": 0.0,
+            "V_MAX": 10.0,
+            "A_MIN": -2.0,
+            "A_MAX": 0.7,
+            "DF_MIN": -0.3,
+            "DF_MAX": 0.3,
+            "A_DOT_MIN": -1.5,
+            "A_DOT_MAX": 1.5,
+            "DF_DOT_MIN": -0.3,
+            "DF_DOT_MAX": 0.3
+        },
+        "trajectory para": {
+            "path": "12_09_buckeyelot_striaght.csv",
+            "original_lat": 40.01481644796,
+            "original_lon": -83.03112299195,
+            "original_alt": 229,
+            "sample": 0.05,
+            "V_REF": [
+                2
+            ]
+        },
+        "controller para": [
+            "MPC-CBF-QP"
+        ],
+        "dynamics para": [
+            "RK2"
+        ],
+        "mpc para": {
+            "Qposx": 500,
+            "Qposy": 500,
+            "Qpsi": 100,
+            "Qvel": 500,
+            "R": {
+                "type": "diag",
+                "values": [
+                    100,
+                    50
+                ]
+            },
+            "N": 7,
+            "DT": 0.1,
+            "LHD": 10,
+            "cbf": {
+                "SAFETY_DIS": 2,
+                "VEHICLE_R": 1.8,
+                "GAMMA": 0.3,
+                "KB": 2,
+                "ALPHA": 7,
+                "LAMBDA": 1,
+                "H": {
+                    "type": "eye",
+                    "values": [
+                        1,
+                        1
+                    ]
+                },
+                "G": {
+                    "values": null
+                }
+            },
+            "obstacle_source": "others"
+        },
+        "cbf para": {
+            "SAFETY_DIS": 2,
+            "VEHICLE_R": 1.8,
+            "GAMMA": 0.3,
+            "KB": 2,
+            "ALPHA": 7,
+            "LAMBDA": 1,
+            "H": {
+                "type": "eye",
+                "values": [
+                    1,
+                    1
+                ]
+            },
+            "G": {
+                "values": null
+            }
+        },
+        "scenario para": [
+            {
+                "name": "2",
+                "type": "sudden_ped",
+                "numofobs": 4,
+                "params": [
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.1,
+                        "START_POS": [
+                            -83,
+                            89
+                        ],
+                        "SUDDEN_DIS": 17,
+                        "END_POS_1": [
+                            -64,
+                            92
+                        ],
+                        "END_POS_2": [
+                            -52,
+                            81
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.5,
+                        "START_POS": [
+                            -55,
+                            59
+                        ],
+                        "SUDDEN_DIS": 11,
+                        "END_POS_1": [
+                            -58,
+                            76
+                        ],
+                        "END_POS_2": [
+                            -46,
+                            50
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 4.3,
+                        "START_POS": [
+                            -61,
+                            97
+                        ],
+                        "SUDDEN_DIS": 16,
+                        "END_POS_1": [
+                            -77,
+                            84
+                        ],
+                        "END_POS_2": [
+                            -50,
+                            40
+                        ]
+                    }
+                ],
+                "SAFETY_DIS": 2,
+                "mpc_max_cpu_time": null,
+                "qp_max_cpu_time": null,
+                "mpc_max_iteration": null,
+                "qp_max_iteration": null,
+                "NUMOFOBS": 4
+            }
+        ]
+    },
+    {
+        "vehicle para": {
+            "name": "Chevy Bolt",
+            "VEHICLE_ID": 1,
+            "L_F": 1.5213,
+            "L_R": 1.4987,
+            "V_MIN": 0.0,
+            "V_MAX": 10.0,
+            "A_MIN": -2.0,
+            "A_MAX": 0.7,
+            "DF_MIN": -0.3,
+            "DF_MAX": 0.3,
+            "A_DOT_MIN": -1.5,
+            "A_DOT_MAX": 1.5,
+            "DF_DOT_MIN": -0.3,
+            "DF_DOT_MAX": 0.3
+        },
+        "trajectory para": {
+            "path": "12_09_buckeyelot_striaght.csv",
+            "original_lat": 40.01481644796,
+            "original_lon": -83.03112299195,
+            "original_alt": 229,
+            "sample": 0.05,
+            "V_REF": [
+                2
+            ]
+        },
+        "controller para": [
+            "MPC-CBF-QP"
+        ],
+        "dynamics para": [
+            "RK2"
+        ],
+        "mpc para": {
+            "Qposx": 500,
+            "Qposy": 500,
+            "Qpsi": 100,
+            "Qvel": 500,
+            "R": {
+                "type": "diag",
+                "values": [
+                    100,
+                    50
+                ]
+            },
+            "N": 7,
+            "DT": 0.1,
+            "LHD": 10,
+            "cbf": {
+                "SAFETY_DIS": 2,
+                "VEHICLE_R": 1.8,
+                "GAMMA": 0.3,
+                "KB": 2,
+                "ALPHA": 7,
+                "LAMBDA": 1,
+                "H": {
+                    "type": "eye",
+                    "values": [
+                        1,
+                        1
+                    ]
+                },
+                "G": {
+                    "values": null
+                }
+            },
+            "obstacle_source": "others"
+        },
+        "cbf para": {
+            "SAFETY_DIS": 2,
+            "VEHICLE_R": 1.8,
+            "GAMMA": 0.3,
+            "KB": 2,
+            "ALPHA": 7,
+            "LAMBDA": 1,
+            "H": {
+                "type": "eye",
+                "values": [
+                    1,
+                    1
+                ]
+            },
+            "G": {
+                "values": null
+            }
+        },
+        "scenario para": [
+            {
+                "name": "2",
+                "type": "sudden_ped",
+                "numofobs": 4,
+                "params": [
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.1,
+                        "START_POS": [
+                            -83,
+                            89
+                        ],
+                        "SUDDEN_DIS": 17,
+                        "END_POS_1": [
+                            -64,
+                            92
+                        ],
+                        "END_POS_2": [
+                            -52,
+                            81
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.5,
+                        "START_POS": [
+                            -55,
+                            59
+                        ],
+                        "SUDDEN_DIS": 11,
+                        "END_POS_1": [
+                            -58,
+                            76
+                        ],
+                        "END_POS_2": [
+                            -46,
+                            50
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 4.3,
+                        "START_POS": [
+                            -61,
+                            97
+                        ],
+                        "SUDDEN_DIS": 16,
+                        "END_POS_1": [
+                            -77,
+                            84
+                        ],
+                        "END_POS_2": [
+                            -50,
+                            40
+                        ]
+                    }
+                ],
+                "SAFETY_DIS": 2,
+                "mpc_max_cpu_time": null,
+                "qp_max_cpu_time": null,
+                "mpc_max_iteration": null,
+                "qp_max_iteration": null,
+                "NUMOFOBS": 4
+            }
+        ]
+    },
+    {
+        "vehicle para": {
+            "name": "Chevy Bolt",
+            "VEHICLE_ID": 1,
+            "L_F": 1.5213,
+            "L_R": 1.4987,
+            "V_MIN": 0.0,
+            "V_MAX": 10.0,
+            "A_MIN": -2.0,
+            "A_MAX": 0.7,
+            "DF_MIN": -0.3,
+            "DF_MAX": 0.3,
+            "A_DOT_MIN": -1.5,
+            "A_DOT_MAX": 1.5,
+            "DF_DOT_MIN": -0.3,
+            "DF_DOT_MAX": 0.3
+        },
+        "trajectory para": {
+            "path": "12_09_buckeyelot_striaght.csv",
+            "original_lat": 40.01481644796,
+            "original_lon": -83.03112299195,
+            "original_alt": 229,
+            "sample": 0.05,
+            "V_REF": [
+                2
+            ]
+        },
+        "controller para": [
+            "MPC-CBF-QP"
+        ],
+        "dynamics para": [
+            "RK2"
+        ],
+        "mpc para": {
+            "Qposx": 500,
+            "Qposy": 500,
+            "Qpsi": 100,
+            "Qvel": 500,
+            "R": {
+                "type": "diag",
+                "values": [
+                    100,
+                    50
+                ]
+            },
+            "N": 7,
+            "DT": 0.1,
+            "LHD": 10,
+            "cbf": {
+                "SAFETY_DIS": 2,
+                "VEHICLE_R": 1.8,
+                "GAMMA": 0.3,
+                "KB": 2,
+                "ALPHA": 7,
+                "LAMBDA": 1,
+                "H": {
+                    "type": "eye",
+                    "values": [
+                        1,
+                        1
+                    ]
+                },
+                "G": {
+                    "values": null
+                }
+            },
+            "obstacle_source": "others"
+        },
+        "cbf para": {
+            "SAFETY_DIS": 2,
+            "VEHICLE_R": 1.8,
+            "GAMMA": 0.3,
+            "KB": 2,
+            "ALPHA": 7,
+            "LAMBDA": 1,
+            "H": {
+                "type": "eye",
+                "values": [
+                    1,
+                    1
+                ]
+            },
+            "G": {
+                "values": null
+            }
+        },
+        "scenario para": [
+            {
+                "name": "2",
+                "type": "sudden_ped",
+                "numofobs": 4,
+                "params": [
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.1,
+                        "START_POS": [
+                            -83,
+                            89
+                        ],
+                        "SUDDEN_DIS": 17,
+                        "END_POS_1": [
+                            -64,
+                            92
+                        ],
+                        "END_POS_2": [
+                            -52,
+                            81
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.5,
+                        "START_POS": [
+                            -55,
+                            59
+                        ],
+                        "SUDDEN_DIS": 11,
+                        "END_POS_1": [
+                            -58,
+                            76
+                        ],
+                        "END_POS_2": [
+                            -46,
+                            50
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 4.3,
+                        "START_POS": [
+                            -61,
+                            97
+                        ],
+                        "SUDDEN_DIS": 16,
+                        "END_POS_1": [
+                            -77,
+                            84
+                        ],
+                        "END_POS_2": [
+                            -50,
+                            40
+                        ]
+                    }
+                ],
+                "SAFETY_DIS": 2,
+                "mpc_max_cpu_time": null,
+                "qp_max_cpu_time": null,
+                "mpc_max_iteration": null,
+                "qp_max_iteration": null,
+                "NUMOFOBS": 4
+            }
+        ]
+    },
+    {
+        "vehicle para": {
+            "name": "Chevy Bolt",
+            "VEHICLE_ID": 1,
+            "L_F": 1.5213,
+            "L_R": 1.4987,
+            "V_MIN": 0.0,
+            "V_MAX": 10.0,
+            "A_MIN": -2.0,
+            "A_MAX": 0.7,
+            "DF_MIN": -0.3,
+            "DF_MAX": 0.3,
+            "A_DOT_MIN": -1.5,
+            "A_DOT_MAX": 1.5,
+            "DF_DOT_MIN": -0.3,
+            "DF_DOT_MAX": 0.3
+        },
+        "trajectory para": {
+            "path": "12_09_buckeyelot_striaght.csv",
+            "original_lat": 40.01481644796,
+            "original_lon": -83.03112299195,
+            "original_alt": 229,
+            "sample": 0.05,
+            "V_REF": [
+                2
+            ]
+        },
+        "controller para": [
+            "MPC-CBF-QP"
+        ],
+        "dynamics para": [
+            "RK2"
+        ],
+        "mpc para": {
+            "Qposx": 500,
+            "Qposy": 500,
+            "Qpsi": 100,
+            "Qvel": 500,
+            "R": {
+                "type": "diag",
+                "values": [
+                    100,
+                    50
+                ]
+            },
+            "N": 7,
+            "DT": 0.1,
+            "LHD": 10,
+            "cbf": {
+                "SAFETY_DIS": 2,
+                "VEHICLE_R": 1.8,
+                "GAMMA": 0.3,
+                "KB": 2,
+                "ALPHA": 7,
+                "LAMBDA": 1,
+                "H": {
+                    "type": "eye",
+                    "values": [
+                        1,
+                        1
+                    ]
+                },
+                "G": {
+                    "values": null
+                }
+            },
+            "obstacle_source": "others"
+        },
+        "cbf para": {
+            "SAFETY_DIS": 2,
+            "VEHICLE_R": 1.8,
+            "GAMMA": 0.3,
+            "KB": 2,
+            "ALPHA": 7,
+            "LAMBDA": 1,
+            "H": {
+                "type": "eye",
+                "values": [
+                    1,
+                    1
+                ]
+            },
+            "G": {
+                "values": null
+            }
+        },
+        "scenario para": [
+            {
+                "name": "2",
+                "type": "sudden_ped",
+                "numofobs": 4,
+                "params": [
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.1,
+                        "START_POS": [
+                            -83,
+                            89
+                        ],
+                        "SUDDEN_DIS": 17,
+                        "END_POS_1": [
+                            -64,
+                            92
+                        ],
+                        "END_POS_2": [
+                            -52,
+                            81
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.5,
+                        "START_POS": [
+                            -55,
+                            59
+                        ],
+                        "SUDDEN_DIS": 11,
+                        "END_POS_1": [
+                            -58,
+                            76
+                        ],
+                        "END_POS_2": [
+                            -46,
+                            50
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 4.3,
+                        "START_POS": [
+                            -61,
+                            97
+                        ],
+                        "SUDDEN_DIS": 16,
+                        "END_POS_1": [
+                            -77,
+                            84
+                        ],
+                        "END_POS_2": [
+                            -50,
+                            40
+                        ]
+                    }
+                ],
+                "SAFETY_DIS": 2,
+                "mpc_max_cpu_time": null,
+                "qp_max_cpu_time": null,
+                "mpc_max_iteration": null,
+                "qp_max_iteration": null,
+                "NUMOFOBS": 4
+            }
+        ]
+    },
+    {
+        "vehicle para": {
+            "name": "Chevy Bolt",
+            "VEHICLE_ID": 1,
+            "L_F": 1.5213,
+            "L_R": 1.4987,
+            "V_MIN": 0.0,
+            "V_MAX": 10.0,
+            "A_MIN": -2.0,
+            "A_MAX": 0.7,
+            "DF_MIN": -0.3,
+            "DF_MAX": 0.3,
+            "A_DOT_MIN": -1.5,
+            "A_DOT_MAX": 1.5,
+            "DF_DOT_MIN": -0.3,
+            "DF_DOT_MAX": 0.3
+        },
+        "trajectory para": {
+            "path": "12_09_buckeyelot_striaght.csv",
+            "original_lat": 40.01481644796,
+            "original_lon": -83.03112299195,
+            "original_alt": 229,
+            "sample": 0.05,
+            "V_REF": [
+                2
+            ]
+        },
+        "controller para": [
+            "MPC-CBF-QP"
+        ],
+        "dynamics para": [
+            "RK2"
+        ],
+        "mpc para": {
+            "Qposx": 500,
+            "Qposy": 500,
+            "Qpsi": 100,
+            "Qvel": 500,
+            "R": {
+                "type": "diag",
+                "values": [
+                    100,
+                    50
+                ]
+            },
+            "N": 7,
+            "DT": 0.1,
+            "LHD": 10,
+            "cbf": {
+                "SAFETY_DIS": 2,
+                "VEHICLE_R": 1.8,
+                "GAMMA": 0.3,
+                "KB": 2,
+                "ALPHA": 7,
+                "LAMBDA": 1,
+                "H": {
+                    "type": "eye",
+                    "values": [
+                        1,
+                        1
+                    ]
+                },
+                "G": {
+                    "values": null
+                }
+            },
+            "obstacle_source": "others"
+        },
+        "cbf para": {
+            "SAFETY_DIS": 2,
+            "VEHICLE_R": 1.8,
+            "GAMMA": 0.3,
+            "KB": 2,
+            "ALPHA": 7,
+            "LAMBDA": 1,
+            "H": {
+                "type": "eye",
+                "values": [
+                    1,
+                    1
+                ]
+            },
+            "G": {
+                "values": null
+            }
+        },
+        "scenario para": [
+            {
+                "name": "2",
+                "type": "sudden_ped",
+                "numofobs": 4,
+                "params": [
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.1,
+                        "START_POS": [
+                            -83,
+                            89
+                        ],
+                        "SUDDEN_DIS": 17,
+                        "END_POS_1": [
+                            -64,
+                            92
+                        ],
+                        "END_POS_2": [
+                            -52,
+                            81
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 3.5,
+                        "START_POS": [
+                            -55,
+                            59
+                        ],
+                        "SUDDEN_DIS": 11,
+                        "END_POS_1": [
+                            -58,
+                            76
+                        ],
+                        "END_POS_2": [
+                            -46,
+                            50
+                        ]
+                    },
+                    {
+                        "OBSTACLE_R": 1.8,
+                        "PED_VEL": 4.3,
+                        "START_POS": [
+                            -61,
+                            97
+                        ],
+                        "SUDDEN_DIS": 16,
+                        "END_POS_1": [
+                            -77,
+                            84
+                        ],
+                        "END_POS_2": [
+                            -50,
+                            40
+                        ]
+                    }
+                ],
+                "SAFETY_DIS": 2,
+                "mpc_max_cpu_time": null,
+                "qp_max_cpu_time": null,
+                "mpc_max_iteration": null,
+                "qp_max_iteration": null,
+                "NUMOFOBS": 4
+            }
+        ]
+    }
+]

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<profiles>
+    <participant profile_name="static_disc_profile" is_default_profile="true">
+        <rtps>
+            <builtin>
+                <initialPeersList>
+                    <locator>
+                        <udpv4>
+                            <address>192.168.50.199</address>
+                        </udpv4>
+                    </locator>
+                </initialPeersList>
+            </builtin>
+        </rtps>
+    </participant>
+</profiles>
