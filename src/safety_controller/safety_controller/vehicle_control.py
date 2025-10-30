@@ -96,7 +96,7 @@ class VehicleControl:
         if self.infopub:
             time.sleep(0.1)
             self.infopub.config_publisher.publish(config_msg)
-            print("config published")
+            print("111config published")
             # time.sleep(0.1)
             # self.infopub.trajectory_publisher.publish(msg)
 

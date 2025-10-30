@@ -225,46 +225,72 @@ class SafeController:
             print("Execute time:", execution_time)
 
 
+class SimulatioNode(Node):
+    def __init__(self):
+        super().__init__("safety_controller")
+        # Node initialization code here
+        configfilepath = os.path.join(
+            get_package_share_directory("safety_controller"),
+            "utilities",
+            "config_IFAC.yaml",
+        )
+
+        with open(configfilepath, "r") as file:
+            self.configfile = yaml.safe_load(file)
+
+    def run_simulation(self):
+
+        scenario_list = self.configfile["scenarios"]
+        controller_list = self.configfile["controller"]
+        velocity_list = self.configfile["trajectory"]["V_REF"]
+        dynamics_list = self.configfile["dynamics"]
+        print("run_time", scenario_list)
+        for scenario in scenario_list:
+            run_time = scenario.get("run_time", 1)
+            for controller_type in controller_list:
+                for velocity in velocity_list:
+                    for dynamics in dynamics_list:
+                        for i in range(run_time):
+                            print(
+                                f"Running {i+1} times simulation with V={velocity}, Controller={controller_type}, Scenario={scenario}, Dynamics={dynamics}"
+                            )
+
+                            # Modify configuration dynamically
+                            self.configfile["trajectory"]["V_REF"] = [velocity]
+                            self.configfile["controller"] = [controller_type]
+                            self.configfile["scenarios"] = [scenario]
+                            self.configfile["dynamics"] = [dynamics]
+
+                            sub = SafeController(self.configfile, i + 1)
+
+                            infopub = info_publisher.InformationPublisher(
+                                self.configfile["vehicle"].get("VEHICLE_ID", 2),
+                                self,
+                            )
+                            sub.ctrl._update_publisher(infopub)
+                            sub.indoorsimu()
+                            time.sleep(1.0)
+
+
 def main(args=None):
 
     rclpy.init(args=args)
 
-    configfilepath = os.path.join(
-        get_package_share_directory("safety_controller"),
-        "utilities",
-        "config_IFAC.yaml",
-    )
-    with open(configfilepath, "r") as file:
-        configfile = yaml.safe_load(file)
+    simulation_node = SimulatioNode()
 
-    scenario_list = configfile["scenarios"]
-    controller_list = configfile["controller"]
-    velocity_list = configfile["trajectory"]["V_REF"]
-    dynamics_list = configfile["dynamics"]
-    print("run_time", scenario_list)
-    for scenario in scenario_list:
-        run_time = scenario.get("run_time", 1)
-        for controller_type in controller_list:
-            for velocity in velocity_list:
-                for dynamics in dynamics_list:
-                    for i in range(run_time):
-                        print(
-                            f"Running {i+1} times simulation with V={velocity}, Controller={controller_type}, Scenario={scenario}, Dynamics={dynamics}"
-                        )
+    executor = MultiThreadedExecutor()
+    executor.add_node(simulation_node)
+    try:
+        simulation_node.run_simulation()
+    except KeyboardInterrupt:
+        simulation_node.get_logger().warning("Simulation interrupted by user (Ctrl+C)")
+        if rclpy.ok():
+            simulation_node.destroy_node()
+            rclpy.shutdown()
+        return
 
-                        # Modify configuration dynamically
-                        configfile["trajectory"]["V_REF"] = [velocity]
-                        configfile["controller"] = [controller_type]
-                        configfile["scenarios"] = [scenario]
-                        configfile["dynamics"] = [dynamics]
-
-                        sub = SafeController(configfile, i + 1)
-
-                        infopub = info_publisher.InformationPublisher()
-                        sub.ctrl._update_publisher(infopub)
-                        sub.indoorsimu()
-                        time.sleep(1.0)
-    rclpy.shutdown()
+    simulation_node.get_logger().info("Simulation Completed. Pressing Ctrl+C to exit.")
+    executor.spin()
 
 
 if __name__ == "__main__":

@@ -55,7 +55,7 @@ def generate_yaml():
             "DF_DOT_MAX": 0.3,
         },
         "trajectory": {
-            "path": "trajectory data/12_09_buckeyelot_striaght.csv",
+            "path": "trajectory_data/12_09_buckeyelot_striaght.csv",
             "sample": 0.05,
             "V_REF": 7,
 

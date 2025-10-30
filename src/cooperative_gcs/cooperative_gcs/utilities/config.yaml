@@ -13,7 +13,7 @@ vehicle:
   DF_DOT_MIN: -0.3
   DF_DOT_MAX: 0.3
 trajectory:
-  path: trajectory data/rotated_trajectory_45.0.csv
+  path: trajectory_data/rotated_trajectory_45.0.csv
   sample: 0.05
   V_REF: 
   - 7

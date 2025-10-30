@@ -1,41 +1,58 @@
 import rclpy
+from rclpy.node import Node
+from rclpy.qos import QoSProfile, QoSDurabilityPolicy, QoSReliabilityPolicy
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import String
 import json
-import numpy as np	
+import numpy as np
+
 
 class InformationPublisher:
-        
-    def __init__(self):
 
-        self.node = rclpy.create_node('waypoints_mpc_follower')
+    def __init__(self, vehicle_id, node: Node):
+
+        self.node = node
+
+        # QoS: trajectory/control data use reliable best-effort with small history
+        qos_transient = QoSProfile(
+            depth=10,
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
+        )
+
+        qos_volatile = QoSProfile(
+            depth=10,
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            durability=QoSDurabilityPolicy.VOLATILE,
+        )
 
         # Publisher 1 for trajectory data
         self.trajectory_publisher = self.node.create_publisher(
-            Float64MultiArray, 'trajectory_data', 10
+            Float64MultiArray, "trajectory_data", qos_transient
         )
 
         self.config_publisher = self.node.create_publisher(
-            String, 'config_data', 10
+            String, "config_data", qos_transient
         )
 
+        namespace = f"/vehicle_{vehicle_id}"
         self.rtdict_publisher = self.node.create_publisher(
-            String, 'rtdict_data', 10
+            String, f"{namespace}/rtdict_data", qos_volatile
         )
 
         # Publisher 3 for control data
         self.mpc_publisher = self.node.create_publisher(
-            String, 'mpc_data', 10
+            String, f"{namespace}/mpc_data", qos_volatile
         )
-
 
     def dict_msg(self, data):
         for key, value in data.items():
             if isinstance(value, np.ndarray):
                 data[key] = value.tolist()
             elif isinstance(value, list):
-                data[key] = [v.tolist() if isinstance(v, np.ndarray) else v for v in value]
-
+                data[key] = [
+                    v.tolist() if isinstance(v, np.ndarray) else v for v in value
+                ]
 
         # Serialize the dictionary to a JSON string
         msg = String()

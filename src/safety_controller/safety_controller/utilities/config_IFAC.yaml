@@ -1,5 +1,6 @@
 vehicle:
   name: Chevy Bolt
+  VEHICLE_ID: 2
   L_F: 1.5213
   L_R: 1.4987
   V_MIN: 0.0
@@ -17,7 +18,7 @@ vehicle:
     mean: 0
     std_dev: 0.5
 trajectory:
-  path: trajectory data/12_09_buckeyelot_striaght.csv
+  path: trajectory_data/12_09_buckeyelot_striaght.csv
   sample: 0.05
   V_REF: 
   - 8
