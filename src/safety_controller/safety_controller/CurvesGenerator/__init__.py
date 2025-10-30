@@ -1,0 +1,1 @@
+# Makes 'CurvesGenerator' a package
