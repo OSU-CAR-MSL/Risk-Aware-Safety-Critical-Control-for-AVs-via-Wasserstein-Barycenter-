@@ -35,6 +35,10 @@ class InformationPublisher:
             String, "config_data", qos_transient
         )
 
+        self.obstacle_publisher = self.node.create_publisher(
+            Float64MultiArray, "/true_obstacle_state", qos_volatile
+        )
+
         namespace = f"/vehicle_{vehicle_id}"
         self.rtdict_publisher = self.node.create_publisher(
             String, f"{namespace}/rtdict_data", qos_volatile

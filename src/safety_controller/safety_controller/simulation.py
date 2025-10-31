@@ -284,8 +284,8 @@ def main(args=None):
         simulation_node.run_simulation()
     except KeyboardInterrupt:
         simulation_node.get_logger().warning("Simulation interrupted by user (Ctrl+C)")
+        simulation_node.destroy_node()
         if rclpy.ok():
-            simulation_node.destroy_node()
             rclpy.shutdown()
         return
 

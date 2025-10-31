@@ -7,9 +7,6 @@ import os
 
 
 def generate_launch_description():
-    share_dir = get_package_share_directory("safety_controller")
-    # Run from share/safety_controller so relative paths like 'utilities/config_IFAC.yaml' and 'trajectory_data/*.csv' work
-    cwd = os.path.join(share_dir)
 
     node = Node(
         package="safety_controller",
@@ -17,9 +14,6 @@ def generate_launch_description():
         name="simulation_node",
         output="screen",
         emulate_tty=True,
-        cwd=cwd,
-        # Export chosen config to the node process as an environment variable
-        # env={"SAFETY_CONFIG": config_arg},
     )
 
     return LaunchDescription([node])

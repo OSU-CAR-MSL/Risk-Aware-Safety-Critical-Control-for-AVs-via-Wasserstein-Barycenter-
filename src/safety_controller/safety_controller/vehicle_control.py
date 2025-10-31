@@ -96,7 +96,6 @@ class VehicleControl:
         if self.infopub:
             time.sleep(0.1)
             self.infopub.config_publisher.publish(config_msg)
-            print("111config published")
             # time.sleep(0.1)
             # self.infopub.trajectory_publisher.publish(msg)
 
@@ -202,6 +201,14 @@ class VehicleControl:
         vehicle_current_states = [x, y, yaw, v]
 
         true_obs_pos = self.obs.update(vehicle_current_states, etime)
+        obs_state_msg = Float64MultiArray()
+        obs_state_msg.data = true_obs_pos.flatten().tolist()
+        if self.infopub:
+            self.infopub.obstacle_publisher.publish(obs_state_msg)
+
+        """
+        """
+        print("True obstacle position: ", true_obs_pos)
         obs_newstates = true_obs_pos.copy()
 
         lidar_data = self.sensors_list["lidar"].samples_from_ricedis(
@@ -237,6 +244,8 @@ class VehicleControl:
         obs_stacked = np.stack([lidar_mean, camera_mean, v2x_mean], axis=0)
         mean_obs_pos = np.mean(obs_stacked, axis=0)
         obs_newstates[:, :2] = mean_obs_pos[:2]
+        """
+        """
 
         self._waypoints_iterator = self._adjust_target_position(
             x, y, self._waypoints_iterator

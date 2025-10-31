@@ -23,7 +23,7 @@ class Trajectory:
         for speed in self.v_ref:
             self.V_REF = speed
         self.traj_file_path = os.path.join(
-            get_package_share_directory("cooperative_gcs"), self.path
+            get_package_share_directory("common"), self.path
         )
 
     def waypoint_gen(self):

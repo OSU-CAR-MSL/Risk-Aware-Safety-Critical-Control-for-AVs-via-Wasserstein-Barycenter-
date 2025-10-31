@@ -4,6 +4,7 @@ import numpy as np
 from safety_controller.utilities import functions
 import os
 import sys
+from ament_index_python.packages import get_package_share_directory
 
 
 class Trajectory:
@@ -18,9 +19,11 @@ class Trajectory:
         for speed in v_ref:
             V_REF = speed
 
+        self.traj_file_path = os.path.join(get_package_share_directory("common"), path)
+
         # read trajectory and finalized local coordinate waypoints
         self.waypoints_lla = pd.read_csv(
-            path, header=None
+            self.traj_file_path, header=None
         )  # read the reference lat and lon here
 
         wps_lat = self.waypoints_lla[0]
