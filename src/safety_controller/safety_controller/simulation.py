@@ -7,6 +7,8 @@ import math
 import multiprocessing
 import yaml
 from rclpy.executors import MultiThreadedExecutor
+from std_msgs.msg import Float64MultiArray
+from safety_msgs.msg import ObstacleStateList
 
 from ament_index_python.packages import get_package_share_directory
 import os
@@ -99,7 +101,7 @@ class SafeController:
 
         run_flag = True
 
-        while run_flag:
+        while rclpy.ok() and run_flag:
             # for i in range(0, len(wps_lat), 5):
 
             start_time = time.time()  # Record the start time
@@ -223,6 +225,7 @@ class SafeController:
             execution_time = end_time - start_time  # Calculate the elapsed time
             self.previous_etime = execution_time
             print("Execute time:", execution_time)
+            rclpy.spin_once(self.ctrl.node)
 
 
 class SimulatioNode(Node):
@@ -261,14 +264,14 @@ class SimulatioNode(Node):
                             self.configfile["scenarios"] = [scenario]
                             self.configfile["dynamics"] = [dynamics]
 
-                            sub = SafeController(self.configfile, i + 1)
-
                             infopub = info_publisher.InformationPublisher(
                                 self.configfile["vehicle"].get("VEHICLE_ID", 2),
                                 self,
                             )
-                            sub.ctrl._update_publisher(infopub)
-                            sub.indoorsimu()
+                            safe_controller = SafeController(self.configfile, i + 1)
+                            safe_controller.ctrl.set_node(self)
+                            safe_controller.ctrl._update_publisher(infopub)
+                            safe_controller.indoorsimu()
                             time.sleep(1.0)
 
 

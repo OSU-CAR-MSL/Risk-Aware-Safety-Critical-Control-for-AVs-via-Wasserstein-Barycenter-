@@ -1,10 +1,12 @@
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import String
+from safety_msgs.msg import ObstacleStateList
 import numpy as np
 import math
 from safety_controller.utilities import functions
 from safety_controller.utilities import trajectory as tr
 import time
+from rclpy.node import Node
 
 
 class VehicleControl:
@@ -61,10 +63,52 @@ class VehicleControl:
         # run_time count
         self.run_time = run_time
 
+        self.opti_meas = None
+        self.mean_obs_pos = None
+        self.node = None
+
+    def MeanNoisedObstacleStateCallback(self, msg: ObstacleStateList):
+        print(f"Received MeanNoisedObstacleState: {msg.header.frame_id}")
+        if msg.numofobs != 1:
+            self.get_logger().error(
+                f"Expected 1 obstacle, but got {msg.numofobs} obstacles."
+            )
+            return
+
+        mean_noised_obs_pos = np.asarray(msg.obstacle_data, dtype=float).reshape(
+            [msg.num_of_time_step, msg.numofobs * 4]
+        )
+        self.mean_noised_obs_pos = mean_noised_obs_pos.copy()
+        print(f"MeanNoisedObstacleState: {self.mean_noised_obs_pos.shape}")
+
+    def OptiMeasNoisedObstacleStateCallback(self, msg: Float64MultiArray):
+        print(f"Received OptiMeasNoisedObstacleState: {msg}")
+        opti_meas = np.asarray(msg.data, dtype=float).reshape(
+            [10, 2]
+        )  # shape = (10, 2)
+        self.opti_meas = opti_meas.copy()
+
     def _update_publisher(self, publisher):
         self.infopub = publisher
         time.sleep(0.1)
         self.pub_config()
+
+    def set_node(self, node: Node):
+        self.node = node
+        # store subscription objects
+        self._sub_mean = self.node.create_subscription(
+            ObstacleStateList,
+            "/mean_noised_obstacle_state",
+            self.MeanNoisedObstacleStateCallback,
+            10,
+        )
+        self._sub_opti = self.node.create_subscription(
+            Float64MultiArray,
+            "/opti_meas_noised_obstacle_state",
+            self.OptiMeasNoisedObstacleStateCallback,
+            10,
+        )
+        print("VehicleControl node and subscriptions set.")
 
     def pub_config(self):
 
@@ -201,13 +245,16 @@ class VehicleControl:
         vehicle_current_states = [x, y, yaw, v]
 
         true_obs_pos = self.obs.update(vehicle_current_states, etime)
-        obs_state_msg = Float64MultiArray()
-        obs_state_msg.data = true_obs_pos.flatten().tolist()
+        obs_state_list_msg = ObstacleStateList()
+        obs_state_list_msg.header.stamp = self.infopub.node.get_clock().now().to_msg()
+        obs_state_list_msg.numofobs = self.numobs
+        obs_state_list_msg.num_of_time_step = true_obs_pos.shape[0]
+        obs_state_list_msg.obstacle_data = true_obs_pos.flatten().tolist()
         if self.infopub:
-            self.infopub.obstacle_publisher.publish(obs_state_msg)
+            self.infopub.obstacle_publisher.publish(obs_state_list_msg)
 
         """
-        """
+        
         print("True obstacle position: ", true_obs_pos)
         obs_newstates = true_obs_pos.copy()
 
@@ -244,7 +291,7 @@ class VehicleControl:
         obs_stacked = np.stack([lidar_mean, camera_mean, v2x_mean], axis=0)
         mean_obs_pos = np.mean(obs_stacked, axis=0)
         obs_newstates[:, :2] = mean_obs_pos[:2]
-        """
+        
         """
 
         self._waypoints_iterator = self._adjust_target_position(
@@ -278,13 +325,18 @@ class VehicleControl:
             target_v = np.concatenate((target_v, padding_v))
             target_states = [target_x, target_y, target_yaw, target_v]
 
+        if self.opti_meas is None or self.mean_noised_obs_pos is None:
+            time.sleep(0.1)
+            return 0, 0, 0, 0, 0
+        print(f"true_obs_pos.shape: {true_obs_pos.shape}")
+
         # update_n_solve(mpc_target, vehicle_noisy_states, obs_mean_qp, prev_control_input_mpc, opti_sensor_samples, vehicle_noisy_samples)
         sol_dict = self.ctrl.update_n_solve(
             target_states,
             vehicle_current_states,
-            obs_newstates,
+            self.mean_noised_obs_pos,
             prev_input,
-            opti_meas,
+            self.opti_meas,
             vehicle_noisy_samples,
         )
 
@@ -303,11 +355,11 @@ class VehicleControl:
         rt_dict["output"] = np.array([acc_prev, steer_prev]).tolist()
         rt_dict["prediction_pos"] = [z_predx, z_predy]
         rt_dict["obs_true_states"] = true_obs_pos[0, :]
-        rt_dict["obs_states"] = obs_newstates[0, :]
-        rt_dict["obs_wb_states"] = opti_meas
-        rt_dict["lidar_mean"] = lidar_mean
-        rt_dict["camera_mean"] = camera_mean
-        rt_dict["v2x_mean"] = v2x_mean
+        rt_dict["obs_states"] = self.mean_noised_obs_pos[0, :]
+        rt_dict["obs_wb_states"] = self.opti_meas
+        # rt_dict["lidar_mean"] = lidar_mean
+        # rt_dict["camera_mean"] = camera_mean
+        # rt_dict["v2x_mean"] = v2x_mean
 
         if self.infopub:
             rtmsg = self.infopub.dict_msg(rt_dict)

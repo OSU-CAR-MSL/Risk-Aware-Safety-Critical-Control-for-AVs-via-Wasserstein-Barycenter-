@@ -3,6 +3,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, QoSDurabilityPolicy, QoSReliabilityPolicy
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import String
+from safety_msgs.msg import ObstacleStateList
 import json
 import numpy as np
 
@@ -36,7 +37,7 @@ class InformationPublisher:
         )
 
         self.obstacle_publisher = self.node.create_publisher(
-            Float64MultiArray, "/true_obstacle_state", qos_volatile
+            ObstacleStateList, "/true_obstacle_state", qos_volatile
         )
 
         namespace = f"/vehicle_{vehicle_id}"

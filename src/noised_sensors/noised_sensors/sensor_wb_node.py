@@ -7,7 +7,12 @@ import os
 import yaml
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSReliabilityPolicy
+from rclpy.qos import (
+    QoSProfile,
+    QoSReliabilityPolicy,
+    QoSDurabilityPolicy,
+    QoSHistoryPolicy,
+)
 from std_msgs.msg import Float64MultiArray
 from sensor_msgs.msg import PointCloud2
 from ament_index_python.packages import get_package_share_directory
@@ -15,7 +20,7 @@ from common.utilities.configprocessor import ConfigProcessor
 from common.utilities import trajectory as tr
 from common.scenario import scenarios
 from noised_sensors.sensor import sensors, wasserstein_barycenter
-from safety_msgs.msg import ObstacleStateList, ObstacleState
+from safety_msgs.msg import ObstacleStateList
 import numpy as np
 
 
@@ -24,14 +29,21 @@ class SensorWBNode(Node):
         super().__init__("noised_sensor_wb_node")
         # Subscribers
         self.create_subscription(
-            Float64MultiArray,
+            ObstacleStateList,
             "/true_obstacle_state",
             self.TrueObstacleStateCallback,
             qos_profile=QoSProfile(
+                depth=10,
+                reliability=QoSReliabilityPolicy.RELIABLE,
+                durability=QoSDurabilityPolicy.VOLATILE,
                 history=QoSHistoryPolicy.KEEP_LAST,
-                depth=1,
-                reliability=QoSReliabilityPolicy.BEST_EFFORT,
             ),
+        )
+        self.mean_noised_obstacle_state_pub = self.create_publisher(
+            ObstacleStateList, "/mean_noised_obstacle_state", 10
+        )
+        self.opti_meas_pub = self.create_publisher(
+            Float64MultiArray, "/opti_meas_noised_obstacle_state", 10
         )
 
         # # Publisher
@@ -61,25 +73,21 @@ class SensorWBNode(Node):
         self.wb_obj = wasserstein_barycenter.WB_distribution()
 
         # self.obs = sce
-
-        self.sample_nums = self.config["GPS"]["samples"]
+        self.sample_nums = self.config.config["vehicle"]["GPS"]["samples"]
 
     def TrueObstacleStateCallback(self, msg: ObstacleStateList):
+        print(f"Received TrueObstacleState: {msg}")
         self.numobs = msg.numofobs
+        self.num_of_time_step = msg.num_of_time_step
         if self.numobs != 1:
             self.get_logger().error(
                 f"Expected 1 obstacle, but got {self.numobs} obstacles."
             )
             return
-        true_obs_pos = [
-            [
-                msg.obstacle_state_list[0].x,
-                msg.obstacle_state_list[0].y,
-                msg.obstacle_state_list[0].yaw,
-                msg.obstacle_state_list[0].v,
-            ]
-            for _ in range(self.config["mpc para"]["N"] + 1)
-        ]
+
+        true_obs_pos = np.asarray(msg.obstacle_data, dtype=float).reshape(
+            [self.num_of_time_step, self.numobs * 4]
+        )
         obs_newstates = true_obs_pos.copy()
 
         lidar_data = self.sensors_list["lidar"].samples_from_ricedis(
@@ -115,6 +123,19 @@ class SensorWBNode(Node):
         obs_stacked = np.stack([lidar_mean, camera_mean, v2x_mean], axis=0)
         mean_obs_pos = np.mean(obs_stacked, axis=0)
         obs_newstates[:, :2] = mean_obs_pos[:2]
+
+        # Publish mean noised obstacle state
+        mean_noised_msg = ObstacleStateList()
+        mean_noised_msg.header.stamp = self.get_clock().now().to_msg()
+        mean_noised_msg.numofobs = self.numobs
+        mean_noised_msg.num_of_time_step = self.num_of_time_step
+        mean_noised_msg.obstacle_data = obs_newstates.flatten().tolist()
+        self.mean_noised_obstacle_state_pub.publish(mean_noised_msg)
+
+        # Publish opti_meas noised obstacle state
+        opti_meas_msg = Float64MultiArray()
+        opti_meas_msg.data = opti_meas.flatten().tolist()
+        self.opti_meas_pub.publish(opti_meas_msg)
 
 
 def main(args=None):
