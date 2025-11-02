@@ -140,7 +140,8 @@ class DynamicMultiVehicleMPCSubscriber(Node):
             self.controller_type =data.get('controller para', [])
             self.scename = [scenario["name"] for scenario in data.get("scenario para", []) if "name" in scenario]
             self.v_ref = data.get("trajectory para", {}).get("V_REF", [])
-            self.test_name = f"{self.scename}_{self.controller_type}_{self.v_ref}"
+            self.run_time = data.get('run_time',1)
+            self.test_name = f"{self.scename}_{self.run_time}_{self.controller_type}_{self.v_ref}"
 
             trajectory_para = data.get("trajectory para", {})
             self.init_plot(vehicle_id)
@@ -516,7 +517,7 @@ class DynamicMultiVehicleMPCSubscriber(Node):
     def save_config_data(self, data, vehicle_id):
         folder_path = os.path.expanduser(f'~/Downloads/cooperative-MPC-CBF-main/cooperative GCS/output data/{self.scename}')
         self.ensure_directory_exists(folder_path)  # Create folder if not exist
-        file_name = os.path.join(folder_path, f'config_vehicle_{vehicle_id}.json')
+        file_name = os.path.join(folder_path, f'config_{self.test_name}_vehicle_{vehicle_id}.json')
         existing_data = []
         if os.path.exists(file_name):
             try:
@@ -538,7 +539,7 @@ class DynamicMultiVehicleMPCSubscriber(Node):
     def save_rtdict_data(self, data, vehicle_id):
         folder_path = os.path.expanduser(f'~/Downloads/cooperative-MPC-CBF-main/cooperative GCS/output data/{self.scename}')
         self.ensure_directory_exists(folder_path)  # Create folder if not exist
-        file_name = os.path.join(folder_path, f'rt_data_vehicle_{vehicle_id}.json')
+        file_name = os.path.join(folder_path, f'rt_data_{self.test_name}_vehicle_{vehicle_id}.json')
         existing_data = []
         if os.path.exists(file_name):
             try:
@@ -559,7 +560,7 @@ class DynamicMultiVehicleMPCSubscriber(Node):
     def save_mpc_data(self, data, vehicle_id):
         folder_path = os.path.expanduser(f'~/Downloads/cooperative-MPC-CBF-main/cooperative GCS/output data/{self.scename}')
         self.ensure_directory_exists(folder_path)  # Create folder if not exist
-        file_name = os.path.join(folder_path, f'mpc_data_vehicle_{vehicle_id}.json')
+        file_name = os.path.join(folder_path, f'mpc_data_{self.test_name}_vehicle_{vehicle_id}.json')
         print('file_name: ', file_name)
         existing_data = []
         if os.path.exists(file_name):

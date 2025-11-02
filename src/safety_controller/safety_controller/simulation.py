@@ -8,6 +8,7 @@ import multiprocessing
 import yaml
 from rclpy.executors import MultiThreadedExecutor
 from std_msgs.msg import Float64MultiArray
+from geometry_msgs.msg import Vector3
 from safety_msgs.msg import ObstacleStateList
 
 from ament_index_python.packages import get_package_share_directory
@@ -155,6 +156,12 @@ class SafeController:
                     self.true_vehicle_states,
                     self.vehicle_noisy_samples,
                 )
+
+                can_forward_msg = Vector3(
+                    x=float(acc), y=float(brake), z=float(steering)
+                )
+                self.ctrl.infopub.can_forward_publisher.publish(can_forward_msg)
+
                 inputs = [_acc_prev, _steer_prev]
 
                 states = self.dynamics.compute_dynamics(

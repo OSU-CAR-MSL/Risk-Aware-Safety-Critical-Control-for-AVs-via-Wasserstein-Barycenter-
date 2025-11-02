@@ -3,6 +3,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, QoSDurabilityPolicy, QoSReliabilityPolicy
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import String
+from geometry_msgs.msg import Vector3
 from safety_msgs.msg import ObstacleStateList
 import json
 import numpy as np
@@ -38,6 +39,10 @@ class InformationPublisher:
 
         self.obstacle_publisher = self.node.create_publisher(
             ObstacleStateList, "/true_obstacle_state", qos_volatile
+        )
+        
+        self.can_forward_publisher = self.node.create_publisher(
+            Vector3, "/can_forward", qos_volatile
         )
 
         namespace = f"/vehicle_{vehicle_id}"

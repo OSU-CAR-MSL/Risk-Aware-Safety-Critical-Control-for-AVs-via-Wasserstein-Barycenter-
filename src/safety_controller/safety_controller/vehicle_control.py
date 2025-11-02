@@ -68,21 +68,17 @@ class VehicleControl:
         self.node = None
 
     def MeanNoisedObstacleStateCallback(self, msg: ObstacleStateList):
-        print(f"Received MeanNoisedObstacleState: {msg.header.frame_id}")
         if msg.numofobs != 1:
             self.get_logger().error(
                 f"Expected 1 obstacle, but got {msg.numofobs} obstacles."
             )
             return
-
         mean_noised_obs_pos = np.asarray(msg.obstacle_data, dtype=float).reshape(
             [msg.num_of_time_step, msg.numofobs * 4]
         )
         self.mean_noised_obs_pos = mean_noised_obs_pos.copy()
-        print(f"MeanNoisedObstacleState: {self.mean_noised_obs_pos.shape}")
 
     def OptiMeasNoisedObstacleStateCallback(self, msg: Float64MultiArray):
-        print(f"Received OptiMeasNoisedObstacleState: {msg}")
         opti_meas = np.asarray(msg.data, dtype=float).reshape(
             [10, 2]
         )  # shape = (10, 2)
@@ -326,7 +322,6 @@ class VehicleControl:
             target_states = [target_x, target_y, target_yaw, target_v]
 
         if self.opti_meas is None or self.mean_noised_obs_pos is None:
-            time.sleep(0.1)
             return 0, 0, 0, 0, 0
         print(f"true_obs_pos.shape: {true_obs_pos.shape}")
 
