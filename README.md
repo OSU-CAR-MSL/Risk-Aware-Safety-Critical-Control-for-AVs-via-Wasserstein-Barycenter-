@@ -17,5 +17,5 @@ An MPC node produces a nominal command; a safety-filter QP minimally modifies it
 
 ## Testing video
 
-![CVaR_nice-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/3734ea06-f6bf-47a3-84c3-9a1923af6257)
+![CVaR_nice-ezgif com-video-to-gif-converter (2)](https://github.com/user-attachments/assets/8908f244-bb1a-4ff8-9816-68e5c1e48f24)
 
